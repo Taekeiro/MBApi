@@ -17,17 +17,18 @@ def get_posts():
 
     if sort_field:
         if sort_field not in ['title', 'content']:
-            return jsonify({"error": f"Invalid sort field '{sort_field}'. Allowed values are 'title' or 'content'."}), 400
+            return (jsonify({"error": f"Invalid sort field '{sort_field}'. Allowed values are 'title' or 'content'."}),
+                    400)
 
         if sort_direction not in ['asc', 'desc']:
-            return jsonify({"error": f"Invalid sort direction '{sort_direction}'. Allowed values are 'asc' or 'desc'."}), 400
+            return (jsonify({"error": f"Invalid sort direction '{sort_direction}'. "
+                                      f"Allowed values are 'asc' or 'desc'."}), 400)
 
         reverse = sort_direction == 'desc'
         sorted_posts = sorted(POSTS, key=lambda x: x[sort_field].lower(), reverse=reverse)
         return jsonify(sorted_posts), 200
 
     return jsonify(POSTS), 200
-
 
 
 @app.route('/api/posts', methods=['POST'])
@@ -63,6 +64,7 @@ def delete_post(post_id):
     POSTS = [post for post in POSTS if post['id'] != post_id]
     return jsonify({"message": f"Post with id {post_id} has been deleted successfully."}), 200
 
+
 @app.route('/api/posts/<int:post_id>', methods=['PUT'])
 def update_post(post_id):
     global POSTS
@@ -91,6 +93,7 @@ def search_posts():
     ]
 
     return jsonify(filtered_posts), 200
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5002, debug=True)
